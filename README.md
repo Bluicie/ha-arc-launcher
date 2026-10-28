@@ -87,4 +87,4 @@ python -m venv .venv
 
 ## License
 
-MIT
+MIT. The icon in `custom_components/arc_launcher/brand/` is the Arc Launcher app icon.

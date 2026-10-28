@@ -131,7 +131,7 @@ async def test_follow_select(
     assert body == {"follow": {"name": "Slaapkamer TV", "url": url, "id": OTHER_ID}}
     assert hass.states.get("select.woonkamer_tv_follow").state == "Slaapkamer TV"
     # A TV does not offer itself.
-    assert "Woonkamer TV" not in hass.states.get("select.slaapkamer_tv_follow").attributes["options"]
+    assert hass.states.get("select.slaapkamer_tv_follow").attributes["options"] == ["none", "Woonkamer TV"]
 
 
 async def test_follow_none(
