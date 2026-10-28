@@ -75,6 +75,10 @@ class ArcLauncherApi:
     async def restore(self, backup: dict[str, Any]) -> dict[str, Any]:
         return await self._request("POST", "restore", backup, timeout=LONG_REQUEST_TIMEOUT)
 
+    async def set_quick_actions(self, actions: list[dict[str, Any]]) -> dict[str, Any]:
+        """Replace the buttons on the TV's status bar; an empty list removes them."""
+        return await self._request("PUT", "quick-actions", {"actions": actions})
+
     async def update_settings(self, **settings: Any) -> dict[str, Any]:
         """PUT share/autoSync/autoBackup/follow; returns the new status."""
         return await self._request("PUT", "settings", settings)

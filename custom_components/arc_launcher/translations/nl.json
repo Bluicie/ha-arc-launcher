@@ -49,17 +49,25 @@
   },
   "entity": {
     "button": {
-      "sync_now": { "name": "Nu synchroniseren" },
-      "backup_now": { "name": "Nu back-up maken" }
+      "sync_now": {
+        "name": "Nu synchroniseren"
+      },
+      "backup_now": {
+        "name": "Nu back-up maken"
+      }
     },
     "select": {
       "follow": {
         "name": "Volgen",
-        "state": { "none": "Volgt niets" }
+        "state": {
+          "none": "Volgt niets"
+        }
       }
     },
     "sensor": {
-      "last_sync": { "name": "Laatste synchronisatie" },
+      "last_sync": {
+        "name": "Laatste synchronisatie"
+      },
       "sync_status": {
         "name": "Synchronisatiestatus",
         "state": {
@@ -69,27 +77,51 @@
           "error": "Fout"
         },
         "state_attributes": {
-          "last_error": { "name": "Laatste fout" }
+          "last_error": {
+            "name": "Laatste fout"
+          }
         }
       },
       "following": {
         "name": "Volgt",
         "state_attributes": {
-          "url": { "name": "URL" }
+          "url": {
+            "name": "URL"
+          }
         }
       },
       "layout_version": {
         "name": "Indelingsversie",
         "state_attributes": {
-          "sections": { "name": "Secties" },
-          "apps": { "name": "Apps" }
+          "sections": {
+            "name": "Secties"
+          },
+          "apps": {
+            "name": "Apps"
+          }
         }
       }
     },
     "switch": {
-      "share_layout": { "name": "Indeling delen" },
-      "auto_sync": { "name": "Automatisch synchroniseren" },
-      "auto_backup": { "name": "Automatische back-up" }
+      "share_layout": {
+        "name": "Indeling delen"
+      },
+      "auto_sync": {
+        "name": "Automatisch synchroniseren"
+      },
+      "auto_backup": {
+        "name": "Automatische back-up"
+      }
+    },
+    "event": {
+      "quick_action": {
+        "name": "Snelknop",
+        "state_attributes": {
+          "label": {
+            "name": "Tekst"
+          }
+        }
+      }
     }
   },
   "services": {
@@ -109,6 +141,85 @@
           "name": "Van tv",
           "description": "Neem de huidige indeling van deze tv over in plaats van een bestand."
         }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Snelknoppen",
+        "description": "Knoppen op de statusbalk van de tv die iets in Home Assistant starten (maximaal {max}). Nu: {actions}. Kies Opslaan om ze naar de tv te sturen.",
+        "menu_options": {
+          "add": "Knop toevoegen",
+          "edit": "Knop wijzigen",
+          "remove": "Knoppen verwijderen",
+          "save": "Opslaan"
+        }
+      },
+      "action": {
+        "title": "Snelknop",
+        "data": {
+          "label": "Tekst",
+          "icon": "Pictogram",
+          "target": "Start"
+        },
+        "data_description": {
+          "label": "Staat op de tv, maximaal 24 tekens.",
+          "target": "Scène, script of automatisering. Laat leeg om alleen de gebeurtenis te sturen, voor je eigen automatiseringen."
+        }
+      },
+      "edit": {
+        "title": "Knop wijzigen",
+        "data": {
+          "action": "Knop"
+        }
+      },
+      "remove": {
+        "title": "Knoppen verwijderen",
+        "data": {
+          "actions": "Knoppen"
+        }
+      }
+    },
+    "error": {
+      "invalid_label": "Gebruik 1 tot 24 tekens."
+    }
+  },
+  "selector": {
+    "icon": {
+      "options": {
+        "gesture-tap": "Tik",
+        "movie": "Film",
+        "television": "Televisie",
+        "lightbulb": "Lamp aan",
+        "lightbulb-off": "Lamp uit",
+        "lamp": "Lamp",
+        "ceiling-light": "Plafondlamp",
+        "bed": "Bed",
+        "weather-night": "Nacht",
+        "power": "Aan/uit",
+        "home": "Thuis",
+        "door": "Deur",
+        "lock": "Slot",
+        "lock-open": "Ontgrendelen",
+        "thermometer": "Thermometer",
+        "fan": "Ventilator",
+        "music": "Muziek",
+        "play": "Afspelen",
+        "pause": "Pauze",
+        "stop": "Stop",
+        "volume-high": "Volume",
+        "volume-off": "Geluid uit",
+        "sofa": "Bank",
+        "star": "Ster",
+        "palette": "Palet",
+        "gamepad-variant": "Spel",
+        "coffee": "Koffie",
+        "bell": "Bel",
+        "account": "Persoon",
+        "blinds": "Jaloezieën",
+        "garage": "Garage",
+        "robot-vacuum": "Robotstofzuiger"
       }
     }
   }

@@ -46,8 +46,28 @@ Per TV:
 | Follow | select | Not following, or one of the other TVs in Home Assistant that share their layout |
 | Sync now | button | Fetch and apply the followed layout now |
 | Back up now | button | Write a timestamped backup file on the TV |
+| Quick action | event | Fires when a quick-action button on the TV is pressed (only when the TV has buttons) |
 
 The status is polled every 60 seconds.
+
+## Quick actions
+
+Put up to 6 buttons on the TV's status bar that run something in Home Assistant, such as "Movie night" or
+"Lights off". Open the TV under **Settings > Devices & services > Arc Launcher**, choose **Configure**, add buttons
+with a label (at most 24 characters), an icon and what to run (a scene, script or automation, or nothing), then
+**Save**. Home Assistant sends them to that TV; each TV has its own buttons, and they are never part of a shared
+layout.
+
+Pressing a button calls a local webhook of Home Assistant, which then:
+- turns on the scene or script, or triggers the automation;
+- fires the event `arc_launcher_quick_action` with `device_id`, `action` (the button's id) and `label`;
+- updates the TV's **Quick action** event entity, whose event type is the button's id. Use it as the trigger for your
+  own automations (handy for buttons that run nothing themselves).
+
+The TV calls Home Assistant on its local address (**Settings > System > Network**, local network URL); a plain-http
+host name is replaced by Home Assistant's IP address, because the TV cannot always resolve it. The webhook only
+accepts calls from the local network. Removing the integration, or disabling the TV in Home Assistant, removes the
+buttons from the TV. Needs an Arc Launcher version with quick actions; older versions are left alone.
 
 ## Action `arc_launcher.restore_layout`
 

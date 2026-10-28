@@ -1,14 +1,22 @@
 {
   "entity": {
     "button": {
-      "sync_now": { "default": "mdi:sync" },
-      "backup_now": { "default": "mdi:content-save" }
+      "sync_now": {
+        "default": "mdi:sync"
+      },
+      "backup_now": {
+        "default": "mdi:content-save"
+      }
     },
     "select": {
-      "follow": { "default": "mdi:television-shimmer" }
+      "follow": {
+        "default": "mdi:television-shimmer"
+      }
     },
     "sensor": {
-      "last_sync": { "default": "mdi:clock-check-outline" },
+      "last_sync": {
+        "default": "mdi:clock-check-outline"
+      },
       "sync_status": {
         "default": "mdi:sync",
         "state": {
@@ -17,16 +25,33 @@
           "error": "mdi:sync-alert"
         }
       },
-      "following": { "default": "mdi:television-guide" },
-      "layout_version": { "default": "mdi:view-grid-outline" }
+      "following": {
+        "default": "mdi:television-guide"
+      },
+      "layout_version": {
+        "default": "mdi:view-grid-outline"
+      }
     },
     "switch": {
-      "share_layout": { "default": "mdi:share-variant" },
-      "auto_sync": { "default": "mdi:sync" },
-      "auto_backup": { "default": "mdi:backup-restore" }
+      "share_layout": {
+        "default": "mdi:share-variant"
+      },
+      "auto_sync": {
+        "default": "mdi:sync"
+      },
+      "auto_backup": {
+        "default": "mdi:backup-restore"
+      }
+    },
+    "event": {
+      "quick_action": {
+        "default": "mdi:gesture-tap-button"
+      }
     }
   },
   "services": {
-    "restore_layout": { "service": "mdi:backup-restore" }
+    "restore_layout": {
+      "service": "mdi:backup-restore"
+    }
   }
 }

@@ -49,17 +49,25 @@
   },
   "entity": {
     "button": {
-      "sync_now": { "name": "Sync now" },
-      "backup_now": { "name": "Back up now" }
+      "sync_now": {
+        "name": "Sync now"
+      },
+      "backup_now": {
+        "name": "Back up now"
+      }
     },
     "select": {
       "follow": {
         "name": "Follow",
-        "state": { "none": "Not following" }
+        "state": {
+          "none": "Not following"
+        }
       }
     },
     "sensor": {
-      "last_sync": { "name": "Last sync" },
+      "last_sync": {
+        "name": "Last sync"
+      },
       "sync_status": {
         "name": "Sync status",
         "state": {
@@ -69,27 +77,51 @@
           "error": "Error"
         },
         "state_attributes": {
-          "last_error": { "name": "Last error" }
+          "last_error": {
+            "name": "Last error"
+          }
         }
       },
       "following": {
         "name": "Following",
         "state_attributes": {
-          "url": { "name": "URL" }
+          "url": {
+            "name": "URL"
+          }
         }
       },
       "layout_version": {
         "name": "Layout version",
         "state_attributes": {
-          "sections": { "name": "Sections" },
-          "apps": { "name": "Apps" }
+          "sections": {
+            "name": "Sections"
+          },
+          "apps": {
+            "name": "Apps"
+          }
         }
       }
     },
     "switch": {
-      "share_layout": { "name": "Share layout" },
-      "auto_sync": { "name": "Automatic sync" },
-      "auto_backup": { "name": "Automatic backup" }
+      "share_layout": {
+        "name": "Share layout"
+      },
+      "auto_sync": {
+        "name": "Automatic sync"
+      },
+      "auto_backup": {
+        "name": "Automatic backup"
+      }
+    },
+    "event": {
+      "quick_action": {
+        "name": "Quick action",
+        "state_attributes": {
+          "label": {
+            "name": "Label"
+          }
+        }
+      }
     }
   },
   "services": {
@@ -109,6 +141,85 @@
           "name": "From TV",
           "description": "Copy the current layout of this TV instead of using a file."
         }
+      }
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Quick actions",
+        "description": "Buttons on the TV's status bar that run something in Home Assistant (at most {max}). Now: {actions}. Choose Save to send them to the TV.",
+        "menu_options": {
+          "add": "Add a button",
+          "edit": "Change a button",
+          "remove": "Remove buttons",
+          "save": "Save"
+        }
+      },
+      "action": {
+        "title": "Quick action",
+        "data": {
+          "label": "Label",
+          "icon": "Icon",
+          "target": "Runs"
+        },
+        "data_description": {
+          "label": "Shown on the TV, at most 24 characters.",
+          "target": "Scene, script or automation. Leave empty to only fire the event, for your own automations."
+        }
+      },
+      "edit": {
+        "title": "Change a button",
+        "data": {
+          "action": "Button"
+        }
+      },
+      "remove": {
+        "title": "Remove buttons",
+        "data": {
+          "actions": "Buttons"
+        }
+      }
+    },
+    "error": {
+      "invalid_label": "Use 1 to 24 characters."
+    }
+  },
+  "selector": {
+    "icon": {
+      "options": {
+        "gesture-tap": "Tap",
+        "movie": "Movie",
+        "television": "Television",
+        "lightbulb": "Light on",
+        "lightbulb-off": "Light off",
+        "lamp": "Lamp",
+        "ceiling-light": "Ceiling light",
+        "bed": "Bed",
+        "weather-night": "Night",
+        "power": "Power",
+        "home": "Home",
+        "door": "Door",
+        "lock": "Lock",
+        "lock-open": "Unlock",
+        "thermometer": "Thermometer",
+        "fan": "Fan",
+        "music": "Music",
+        "play": "Play",
+        "pause": "Pause",
+        "stop": "Stop",
+        "volume-high": "Volume",
+        "volume-off": "Mute",
+        "sofa": "Sofa",
+        "star": "Star",
+        "palette": "Palette",
+        "gamepad-variant": "Game",
+        "coffee": "Coffee",
+        "bell": "Bell",
+        "account": "Person",
+        "blinds": "Blinds",
+        "garage": "Garage",
+        "robot-vacuum": "Robot vacuum"
       }
     }
   }

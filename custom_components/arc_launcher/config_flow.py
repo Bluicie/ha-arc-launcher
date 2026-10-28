@@ -9,17 +9,41 @@ from typing import Any
 
 import voluptuous as vol
 
-from homeassistant.config_entries import SOURCE_REAUTH, ConfigFlow, ConfigFlowResult
+from homeassistant.config_entries import SOURCE_REAUTH, ConfigEntry, ConfigFlow, ConfigFlowResult, OptionsFlow
 from homeassistant.const import CONF_HOST, CONF_PORT, CONF_TOKEN
+from homeassistant.core import callback
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.selector import (
+    EntitySelector,
+    EntitySelectorConfig,
+    SelectOptionDict,
+    SelectSelector,
+    SelectSelectorConfig,
+    SelectSelectorMode,
+    TextSelector,
+)
 from homeassistant.helpers.service_info.zeroconf import ZeroconfServiceInfo
+from homeassistant.util import slugify
 
 from .api import ArcLauncherApi, ArcLauncherAuthError, ArcLauncherConnectionError, ArcLauncherError
-from .const import CLIENT_NAME, DEFAULT_PORT, DOMAIN
+from .const import (
+    CLIENT_NAME,
+    CONF_QUICK_ACTIONS,
+    DEFAULT_PORT,
+    DOMAIN,
+    MAX_LABEL_LENGTH,
+    MAX_QUICK_ACTIONS,
+    QUICK_ACTION_ICONS,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
 CONF_CODE = "code"
+CONF_LABEL = "label"
+CONF_ICON = "icon"
+CONF_TARGET = "target"
+CONF_ACTION = "action"
+CONF_ACTIONS = "actions"
 
 
 def _valid_host(host: str) -> bool:
@@ -33,6 +57,11 @@ def _valid_host(host: str) -> bool:
 
 class ArcLauncherConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = 1
+
+    @staticmethod
+    @callback
+    def async_get_options_flow(config_entry: ConfigEntry) -> ArcLauncherOptionsFlow:
+        return ArcLauncherOptionsFlow()
 
     def __init__(self) -> None:
         self._host = ""
@@ -179,3 +208,110 @@ class ArcLauncherConfigFlow(ConfigFlow, domain=DOMAIN):
             return self.async_update_reload_and_abort(self._get_reauth_entry(), data_updates=data)
         self._abort_if_unique_id_configured(updates=data)
         return self.async_create_entry(title=result.get("name") or self._name, data=data)
+
+
+class ArcLauncherOptionsFlow(OptionsFlow):
+    """Manage the quick-action buttons on the TV's status bar."""
+
+    def __init__(self) -> None:
+        self._actions: list[dict[str, Any]] | None = None
+        self._editing: int | None = None
+
+    @property
+    def actions(self) -> list[dict[str, Any]]:
+        if self._actions is None:
+            self._actions = [dict(a) for a in self.config_entry.options.get(CONF_QUICK_ACTIONS, [])]
+        return self._actions
+
+    def _choices(self) -> list[SelectOptionDict]:
+        return [SelectOptionDict(value=a["id"], label=a["label"]) for a in self.actions]
+
+    async def async_step_init(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        menu = ["add"] if len(self.actions) < MAX_QUICK_ACTIONS else []
+        if self.actions:
+            menu += ["edit", "remove"]
+        menu.append("save")
+        return self.async_show_menu(
+            step_id="init",
+            menu_options=menu,
+            description_placeholders={
+                "actions": ", ".join(a["label"] for a in self.actions) or "-",
+                "max": str(MAX_QUICK_ACTIONS),
+            },
+        )
+
+    async def async_step_add(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        self._editing = None
+        return await self.async_step_action()
+
+    async def async_step_edit(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        if user_input is not None:
+            self._editing = next(i for i, a in enumerate(self.actions) if a["id"] == user_input[CONF_ACTION])
+            return await self.async_step_action()
+        return self.async_show_form(
+            step_id="edit",
+            data_schema=vol.Schema({vol.Required(CONF_ACTION): SelectSelector(SelectSelectorConfig(options=self._choices()))}),
+        )
+
+    async def async_step_remove(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        if user_input is not None:
+            self._actions = [a for a in self.actions if a["id"] not in user_input[CONF_ACTIONS]]
+            return await self.async_step_init()
+        return self.async_show_form(
+            step_id="remove",
+            data_schema=vol.Schema(
+                {vol.Required(CONF_ACTIONS): SelectSelector(SelectSelectorConfig(options=self._choices(), multiple=True))}
+            ),
+        )
+
+    async def async_step_action(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        """Label, icon and what the button runs (a scene, script or automation, or only the event)."""
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            label = user_input[CONF_LABEL].strip()
+            if not 1 <= len(label) <= MAX_LABEL_LENGTH:
+                errors[CONF_LABEL] = "invalid_label"
+            else:
+                action = {
+                    "label": label,
+                    "icon": user_input[CONF_ICON],
+                    "target": user_input.get(CONF_TARGET) or None,
+                }
+                if self._editing is None:
+                    self.actions.append({"id": self._new_id(label), **action})
+                else:
+                    self.actions[self._editing].update(action)
+                return await self.async_step_init()
+
+        current = self.actions[self._editing] if self._editing is not None else {}
+        schema = vol.Schema(
+            {
+                vol.Required(CONF_LABEL): TextSelector(),
+                vol.Required(CONF_ICON, default="gesture-tap"): SelectSelector(
+                    SelectSelectorConfig(
+                        options=QUICK_ACTION_ICONS, mode=SelectSelectorMode.DROPDOWN, translation_key="icon"
+                    )
+                ),
+                vol.Optional(CONF_TARGET): EntitySelector(
+                    EntitySelectorConfig(domain=["scene", "script", "automation"])
+                ),
+            }
+        )
+        suggested = user_input or {k: v for k, v in current.items() if k != "id" and v is not None}
+        return self.async_show_form(
+            step_id="action",
+            data_schema=self.add_suggested_values_to_schema(schema, suggested),
+            errors=errors,
+        )
+
+    async def async_step_save(self, user_input: dict[str, Any] | None = None) -> ConfigFlowResult:
+        return self.async_create_entry(data={**self.config_entry.options, CONF_QUICK_ACTIONS: self.actions})
+
+    def _new_id(self, label: str) -> str:
+        """A stable id from the label: 1-40 chars of [a-z0-9_], unique on this TV."""
+        base = slugify(label)[:36] or "action"
+        taken = {a["id"] for a in self.actions}
+        new_id, n = base, 2
+        while new_id in taken:
+            new_id, n = f"{base}_{n}", n + 1
+        return new_id
