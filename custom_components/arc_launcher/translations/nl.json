@@ -1,0 +1,115 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "description": "Zet op de tv Settings > Backup & restore > Allow control from other apps aan.",
+        "data": {
+          "host": "Host",
+          "port": "Poort"
+        },
+        "data_description": {
+          "host": "IP-adres van de tv (of de .local-naam).",
+          "port": "Poort van de Arc Launcher-API; 47474, tenzij je die hebt gewijzigd."
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "{name} ({host}) toevoegen? In de volgende stap verschijnt een code op de tv."
+      },
+      "reauth_confirm": {
+        "title": "Opnieuw koppelen met {name}",
+        "description": "{name} accepteert Home Assistant niet meer, bijvoorbeeld omdat Allow control from other apps is uitgezet. Zet die weer aan; in de volgende stap verschijnt een nieuwe code op de tv."
+      },
+      "pair": {
+        "title": "Code invoeren",
+        "description": "Voer de 6-cijferige code in die op {name} staat. De code is 2 minuten geldig.",
+        "data": {
+          "code": "Code"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Kan de tv niet bereiken. Staat hij aan, met Arc Launcher als startscherm?",
+      "invalid_host": "Gebruik een IP-adres of een .local-naam.",
+      "not_arc_launcher": "Dit is geen tv met Arc Launcher.",
+      "control_disabled": "Zet op de tv Allow control from other apps aan (Settings > Backup & restore).",
+      "invalid_code": "Verkeerde code. Controleer de code op de tv.",
+      "pairing_busy": "De tv wacht al op een andere koppelcode. Wacht 2 minuten en probeer het opnieuw.",
+      "pairing_blocked": "Te veel verkeerde codes. Koppelen is even geblokkeerd; probeer het later opnieuw.",
+      "pairing_restarted": "De code is verlopen. De tv toont nu een nieuwe code.",
+      "unknown": "Onverwachte fout, zie het logboek."
+    },
+    "abort": {
+      "already_configured": "Deze tv is al ingesteld.",
+      "not_arc_launcher": "Dit is geen tv met Arc Launcher.",
+      "not_ipv4_address": "Alleen IPv4-adressen worden ondersteund.",
+      "reauth_successful": "Opnieuw gekoppeld.",
+      "wrong_device": "Die code hoort bij een andere tv."
+    }
+  },
+  "entity": {
+    "button": {
+      "sync_now": { "name": "Nu synchroniseren" },
+      "backup_now": { "name": "Nu back-up maken" }
+    },
+    "select": {
+      "follow": {
+        "name": "Volgen",
+        "state": { "none": "Volgt niets" }
+      }
+    },
+    "sensor": {
+      "last_sync": { "name": "Laatste synchronisatie" },
+      "sync_status": {
+        "name": "Synchronisatiestatus",
+        "state": {
+          "never": "Nooit",
+          "syncing": "Bezig",
+          "ok": "OK",
+          "error": "Fout"
+        },
+        "state_attributes": {
+          "last_error": { "name": "Laatste fout" }
+        }
+      },
+      "following": {
+        "name": "Volgt",
+        "state_attributes": {
+          "url": { "name": "URL" }
+        }
+      },
+      "layout_version": {
+        "name": "Indelingsversie",
+        "state_attributes": {
+          "sections": { "name": "Secties" },
+          "apps": { "name": "Apps" }
+        }
+      }
+    },
+    "switch": {
+      "share_layout": { "name": "Indeling delen" },
+      "auto_sync": { "name": "Automatisch synchroniseren" },
+      "auto_backup": { "name": "Automatische back-up" }
+    }
+  },
+  "services": {
+    "restore_layout": {
+      "name": "Indeling herstellen",
+      "description": "Zet een Arc Launcher-instellingenbestand op een of meer tv's, uit een bestand in de configuratiemap of van een andere tv.",
+      "fields": {
+        "device_id": {
+          "name": "Tv's",
+          "description": "De tv's die de indeling krijgen."
+        },
+        "file": {
+          "name": "Bestand",
+          "description": "Instellingenbestand, relatief aan de configuratiemap van Home Assistant."
+        },
+        "from_device": {
+          "name": "Van tv",
+          "description": "Neem de huidige indeling van deze tv over in plaats van een bestand."
+        }
+      }
+    }
+  }
+}

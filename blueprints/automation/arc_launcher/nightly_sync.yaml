@@ -1,0 +1,53 @@
+blueprint:
+  name: Arc Launcher - nightly sync
+  description: >
+    Every night, press Sync now on the chosen TVs so they follow the latest shared layout,
+    even when they were off when it changed. Optionally also back up each TV.
+  domain: automation
+  author: Bluicie
+  source_url: https://github.com/Bluicie/ha-arc-launcher/blob/main/blueprints/automation/arc_launcher/nightly_sync.yaml
+  homeassistant:
+    min_version: "2024.10.0"
+  input:
+    sync_buttons:
+      name: Sync now buttons
+      description: The "Sync now" buttons of the TVs that follow another TV.
+      selector:
+        target:
+          entity:
+            integration: arc_launcher
+            domain: button
+    backup_buttons:
+      name: Back up now buttons (optional)
+      description: The "Back up now" buttons of the TVs to back up after the sync.
+      default: {}
+      selector:
+        target:
+          entity:
+            integration: arc_launcher
+            domain: button
+    time:
+      name: Time
+      default: "03:00:00"
+      selector:
+        time:
+
+mode: single
+
+variables:
+  backup_buttons: !input backup_buttons
+
+triggers:
+  - trigger: time
+    at: !input time
+
+actions:
+  - action: button.press
+    target: !input sync_buttons
+    continue_on_error: true
+  - if:
+      - condition: template
+        value_template: "{{ backup_buttons not in ({}, none, '') }}"
+    then:
+      - action: button.press
+        target: !input backup_buttons

@@ -1,0 +1,16 @@
+restore_layout:
+  fields:
+    device_id:
+      required: true
+      selector:
+        device:
+          integration: arc_launcher
+          multiple: true
+    file:
+      example: arc-launcher/kids.json
+      selector:
+        text:
+    from_device:
+      selector:
+        device:
+          integration: arc_launcher

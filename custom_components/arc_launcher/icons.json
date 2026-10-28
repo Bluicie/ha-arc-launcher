@@ -1,0 +1,32 @@
+{
+  "entity": {
+    "button": {
+      "sync_now": { "default": "mdi:sync" },
+      "backup_now": { "default": "mdi:content-save" }
+    },
+    "select": {
+      "follow": { "default": "mdi:television-shimmer" }
+    },
+    "sensor": {
+      "last_sync": { "default": "mdi:clock-check-outline" },
+      "sync_status": {
+        "default": "mdi:sync",
+        "state": {
+          "never": "mdi:sync-off",
+          "ok": "mdi:check-circle-outline",
+          "error": "mdi:sync-alert"
+        }
+      },
+      "following": { "default": "mdi:television-guide" },
+      "layout_version": { "default": "mdi:view-grid-outline" }
+    },
+    "switch": {
+      "share_layout": { "default": "mdi:share-variant" },
+      "auto_sync": { "default": "mdi:sync" },
+      "auto_backup": { "default": "mdi:backup-restore" }
+    }
+  },
+  "services": {
+    "restore_layout": { "service": "mdi:backup-restore" }
+  }
+}

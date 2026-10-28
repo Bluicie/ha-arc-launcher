@@ -1,0 +1,115 @@
+{
+  "config": {
+    "flow_title": "{name}",
+    "step": {
+      "user": {
+        "description": "On the TV, turn on Settings > Backup & restore > Allow control from other apps.",
+        "data": {
+          "host": "Host",
+          "port": "Port"
+        },
+        "data_description": {
+          "host": "IP address of the TV (or its .local name).",
+          "port": "Port of the Arc Launcher API; 47474 unless you changed it."
+        }
+      },
+      "zeroconf_confirm": {
+        "description": "Add {name} ({host})? The next step shows a code on the TV."
+      },
+      "reauth_confirm": {
+        "title": "Pair again with {name}",
+        "description": "{name} no longer accepts Home Assistant, for example because control from other apps was turned off. Make sure it is turned on; the next step shows a new code on the TV."
+      },
+      "pair": {
+        "title": "Enter the code",
+        "description": "Enter the 6-digit code shown on {name}. The code is valid for 2 minutes.",
+        "data": {
+          "code": "Code"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Cannot reach the TV. Is it on, with Arc Launcher as the home app?",
+      "invalid_host": "Use an IP address or a .local name.",
+      "not_arc_launcher": "This is not an Arc Launcher TV.",
+      "control_disabled": "Turn on Allow control from other apps on the TV (Settings > Backup & restore).",
+      "invalid_code": "Wrong code. Check the code on the TV.",
+      "pairing_busy": "The TV is already waiting for another pairing code. Wait 2 minutes and try again.",
+      "pairing_blocked": "Too many wrong codes. Pairing is blocked for a while; try again later.",
+      "pairing_restarted": "The code expired. The TV now shows a new code.",
+      "unknown": "Unexpected error, see the log."
+    },
+    "abort": {
+      "already_configured": "This TV is already configured.",
+      "not_arc_launcher": "This is not an Arc Launcher TV.",
+      "not_ipv4_address": "Only IPv4 addresses are supported.",
+      "reauth_successful": "Paired again.",
+      "wrong_device": "That code belongs to a different TV."
+    }
+  },
+  "entity": {
+    "button": {
+      "sync_now": { "name": "Sync now" },
+      "backup_now": { "name": "Back up now" }
+    },
+    "select": {
+      "follow": {
+        "name": "Follow",
+        "state": { "none": "Not following" }
+      }
+    },
+    "sensor": {
+      "last_sync": { "name": "Last sync" },
+      "sync_status": {
+        "name": "Sync status",
+        "state": {
+          "never": "Never",
+          "syncing": "Syncing",
+          "ok": "OK",
+          "error": "Error"
+        },
+        "state_attributes": {
+          "last_error": { "name": "Last error" }
+        }
+      },
+      "following": {
+        "name": "Following",
+        "state_attributes": {
+          "url": { "name": "URL" }
+        }
+      },
+      "layout_version": {
+        "name": "Layout version",
+        "state_attributes": {
+          "sections": { "name": "Sections" },
+          "apps": { "name": "Apps" }
+        }
+      }
+    },
+    "switch": {
+      "share_layout": { "name": "Share layout" },
+      "auto_sync": { "name": "Automatic sync" },
+      "auto_backup": { "name": "Automatic backup" }
+    }
+  },
+  "services": {
+    "restore_layout": {
+      "name": "Restore layout",
+      "description": "Applies an Arc Launcher settings file to one or more TVs, from a file in the config folder or from another TV.",
+      "fields": {
+        "device_id": {
+          "name": "TVs",
+          "description": "The TVs that get the layout."
+        },
+        "file": {
+          "name": "File",
+          "description": "Settings file, relative to the Home Assistant config folder."
+        },
+        "from_device": {
+          "name": "From TV",
+          "description": "Copy the current layout of this TV instead of using a file."
+        }
+      }
+    }
+  }
+}

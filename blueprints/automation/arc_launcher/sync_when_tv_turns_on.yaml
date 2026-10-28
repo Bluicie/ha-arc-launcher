@@ -1,0 +1,53 @@
+blueprint:
+  name: Arc Launcher - sync when a TV turns on
+  description: >
+    When the TV turns on, wait a moment and press Sync now, so the TV picks up the
+    layout of the TV it follows.
+  domain: automation
+  author: Bluicie
+  source_url: https://github.com/Bluicie/ha-arc-launcher/blob/main/blueprints/automation/arc_launcher/sync_when_tv_turns_on.yaml
+  homeassistant:
+    min_version: "2024.10.0"
+  input:
+    tv:
+      name: TV
+      description: Media player of the TV (for example from Android TV Remote or Google Cast).
+      selector:
+        entity:
+          domain: media_player
+    sync_button:
+      name: Sync now button
+      description: The "Sync now" button of the same TV.
+      selector:
+        target:
+          entity:
+            integration: arc_launcher
+            domain: button
+    delay:
+      name: Delay
+      description: Time for the TV to connect to the network and start the launcher.
+      default:
+        seconds: 30
+      selector:
+        duration:
+
+mode: single
+max_exceeded: silent
+
+triggers:
+  - trigger: state
+    entity_id: !input tv
+    from:
+      - "off"
+      - standby
+      - unavailable
+    not_to:
+      - "off"
+      - standby
+      - unavailable
+      - unknown
+
+actions:
+  - delay: !input delay
+  - action: button.press
+    target: !input sync_button
